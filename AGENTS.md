@@ -2,13 +2,19 @@
 
 ## Cursor Cloud specific instructions
 
-This repository ("JessicaOS") is currently an empty project with only a `README.md`. There is no application code, no dependencies, no build system, and no services to run.
+JessicaOS is a legal AI platform with a Next.js frontend and Express backend. See `README.md` for standard setup commands.
 
-- **No package manager or lockfile** exists yet. When source code is added, the update script and these instructions should be updated accordingly.
-- **No linting, testing, or build commands** are configured.
-- **No external services** (databases, caches, etc.) are required.
+### Services
 
-Once the project gains source code and a build system, update this section with:
-- How to install dependencies
-- How to run lint/test/build/dev commands
-- Any non-obvious startup caveats
+| Service | Port | Command |
+|---------|------|---------|
+| Backend (Express) | 3001 | `npm run dev --prefix backend` |
+| Frontend (Next.js) | 3000 | `npm run dev --prefix frontend` |
+
+### Non-obvious notes
+
+- The backend starts without Supabase or AI provider keys — routes return appropriate errors but the server runs fine. This makes local development possible without external services for UI work.
+- The agent system uses **mock tool implementations** that return sample data, so the agent loop can be tested end-to-end once an AI provider key is set. Real Supabase/S3 integration replaces the mocks in `backend/src/lib/agent/tools.ts`.
+- The frontend communicates with the backend via SSE (Server-Sent Events) for the agent run endpoint (`POST /agent/run`). The response streams agent steps in real time.
+- Backend lint uses `prettier --check src/`. Frontend lint uses `eslint src/`.
+- The frontend `.env.local` must set `NEXT_PUBLIC_API_BASE_URL=http://localhost:3001` for local dev.
